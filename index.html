@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://unpkg.com" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/js/all.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * {
+      scrollbar-width: none;
+      scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    }
+  </style>
+</head>
+
+<body class="bg-[#0a0e1a] text-white antialiased">
+
+<!-- Tailwind Theme & Custom Styles -->
+<style type="text/tailwindcss">
+  @theme {
+    --color-primary: #0d1b2a;
+    --color-secondary: #1b2a4a;
+    --color-accent: #c9a84c;
+    --color-accent-light: #e2c97e;
+    --color-surface: #111827;
+    --color-surface-light: #1a2540;
+    --color-pulse-green: #22c55e;
+    --color-pulse-red: #ef4444;
+    --color-text-primary: #f1f5f9;
+    --color-text-muted: #94a3b8;
+    --color-border: #1e293b;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+  }
+</style>
+
+<style>
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  @keyframes ticker-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+  .ticker-scroll { animation: ticker-scroll 30s linear infinite; }
+  .gradient-shift {
+    background-size: 200% 200%;
+    animation: gradient-shift 8s ease infinite;
+  }
+  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .ai-badge {
+    background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .glass-nav {
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .spark-line {
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+  }
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.cn/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" />
+
+<!-- Navigation -->
+<nav class="glass-nav fixed top-0 left-0 right-0 z-50 border-b border-border">
+  <div class="max-w-[1440px] mx-auto px-12 h-[72px] flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-accent to-accent-light flex items-center justify-center">
+        <i data-lucide="activity" class="w-5 h-5 text-primary"></i>
+      </div>
+      <div>
+        <span class="font-[family-name:var(--font-display)] text-xl font-bold tracking-tight text-white">NexusFin</span>
+        <span class="text-accent font-[family-name:var(--font-body)] text-sm font-semibold ml-1">AI</span>
+      </div>
+    </a>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="index.html" class="text-white font-medium text-sm hover:text-accent transition-colors">Início</a>
+      <a href="article.html" class="text-text-muted text-sm hover:text-accent transition-colors">Artigos</a>
+      <a href="about.html" class="text-text-muted text-sm hover:text-accent transition-colors">Como Funciona</a>
+      <div class="relative group">
+        <button class="text-text-muted text-sm hover:text-accent transition-colors flex items-center gap-1">
+          Categorias <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+        </button>
+        <div class="absolute top-full left-0 mt-2 w-48 bg-surface-light border border-border rounded-xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-xl">
+          <a href="#" class="block px-4 py-2 text-sm text-text-muted hover:text-accent hover:bg-white/5 transition-colors">Ações</a>
+          <a href="#" class="block px-4 py-2 text-sm text-text-muted hover:text-accent hover:bg-white/5 transition-colors">Criptomoedas</a>
+          <a href="#" class="block px-4 py-2 text-sm text-text-muted hover:text-accent hover:bg-white/5 transition-colors">Economia Global</a>
+          <a href="#" class="block px-4 py-2 text-sm text-text-muted hover:text-accent hover:bg-white/5 transition-colors">Tendências</a>
+          <a href="#" class="block px-4 py-2 text-sm text-text-muted hover:text-accent hover:bg-white/5 transition-colors">Commodities</a>
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full ai-badge">
+        <span class="w-2 h-2 rounded-full bg-pulse-green pulse-dot"></span>
+        <span class="text-xs font-medium text-accent">IA Ativa</span>
+      </div>
+      <button class="w-10 h-10 rounded-lg bg-surface-light border border-border flex items-center justify-center hover:border-accent/40 transition-colors">
+        <i data-lucide="search" class="w-4 h-4 text-text-muted"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Live Ticker Bar -->
+<div class="fixed top-[72px] left-0 right-0 z-40 bg-surface border-b border-border h-10 overflow-hidden">
+  <div class="ticker-scroll flex items-center h-full whitespace-nowrap">
+    <div class="flex items-center gap-8 px-4">
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">IBOV</span>
+        <span class="text-white">128.450</span>
+        <span class="text-pulse-green flex items-center gap-0.5"><i data-lucide="trending-up" class="w-3 h-3"></i>+1.24%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">S&P 500</span>
+        <span class="text-white">5.842</span>
+        <span class="text-pulse-green flex items-center gap-0.5"><i data-lucide="trending-up" class="w-3 h-3"></i>+0.67%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">BTC/USD</span>
+        <span class="text-white">$104.280</span>
+        <span class="text-pulse-red flex items-center gap-0.5"><i data-lucide="trending-down" class="w-3 h-3"></i>-2.15%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">EUR/BRL</span>
+        <span class="text-white">6.12</span>
+        <span class="text-pulse-green flex items-center gap-0.5"><i data-lucide="trending-up" class="w-3 h-3"></i>+0.32%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">OURO</span>
+        <span class="text-white">$2.648</span>
+        <span class="text-pulse-green flex items-center gap-0.5"><i data-lucide="trending-up" class="w-3 h-3"></i>+0.89%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">NASDAQ</span>
+        <span class="text-white">18.920</span>
+        <span class="text-pulse-green flex items-center gap-0.5"><i data-lucide="trending-up" class="w-3 h-3"></i>+1.02%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">ETH/USD</span>
+        <span class="text-white">$2.485</span>
+        <span class="text-pulse-red flex items-center gap-0.5"><i data-lucide="trending-down" class="w-3 h-3"></i>-0.78%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">USD/BRL</span>
+        <span class="text-white">5.68</span>
+        <span class="text-pulse-red flex items-center gap-0.5"><i data-lucide="trending-down" class="w-3 h-3"></i>-0.15%</span>
+      </span>
+    </div>
+    <!-- Duplicate for seamless loop -->
+    <div class="flex items-center gap-8 px-4">
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">IBOV</span>
+        <span class="text-white">128.450</span>
+        <span class="text-pulse-green flex items-center gap-0.5"><i data-lucide="trending-up" class="w-3 h-3"></i>+1.24%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">S&P 500</span>
+        <span class="text-white">5.842</span>
+        <span class="text-pulse-green flex items-center gap-0.5"><i data-lucide="trending-up" class="w-3 h-3"></i>+0.67%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">BTC/USD</span>
+        <span class="text-white">$104.280</span>
+        <span class="text-pulse-red flex items-center gap-0.5"><i data-lucide="trending-down" class="w-3 h-3"></i>-2.15%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">EUR/BRL</span>
+        <span class="text-white">6.12</span>
+        <span class="text-pulse-green flex items-center gap-0.5"><i data-lucide="trending-up" class="w-3 h-3"></i>+0.32%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">OURO</span>
+        <span class="text-white">$2.648</span>
+        <span class="text-pulse-green flex items-center gap-0.5"><i data-lucide="trending-up" class="w-3 h-3"></i>+0.89%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">NASDAQ</span>
+        <span class="text-white">18.920</span>
+        <span class="text-pulse-green flex items-center gap-0.5"><i data-lucide="trending-up" class="w-3 h-3"></i>+1.02%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">ETH/USD</span>
+        <span class="text-white">$2.485</span>
+        <span class="text-pulse-red flex items-center gap-0.5"><i data-lucide="trending-down" class="w-3 h-3"></i>-0.78%</span>
+      </span>
+      <span class="flex items-center gap-2 text-xs font-medium">
+        <span class="text-text-muted">USD/BRL</span>
+        <span class="text-white">5.68</span>
+        <span class="text-pulse-red flex items-center gap-0.5"><i data-lucide="trending-down" class="w-3 h-3"></i>-0.15%</span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="pt-[112px]">
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden">
+    <!-- Background pattern -->
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect width=%2260%22 height=%2260%22 fill=%22none%22 stroke=%22white%22 stroke-width=%220.5%22/></svg>');"></div>
+    <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-accent/5 rounded-full blur-[150px]"></div>
+    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[120px]"></div>
+
+    <div class="max-w-[1440px] mx-auto px-12 py-24">
+      <div class="grid grid-cols-12 gap-8 items-center">
+        <!-- Left: Hero Text -->
+        <div class="col-span-7">
+          <div class="flex items-center gap-2 mb-6">
+            <div class="flex items-center gap-2 px-3 py-1.5 rounded-full ai-badge">
+              <span class="w-2 h-2 rounded-full bg-pulse-green pulse-dot"></span>
+              <span class="text-xs font-semibold text-accent tracking-wide uppercase">Inteligência Artificial em Tempo Real</span>
+            </div>
+          </div>
+          <h1 class="font-[family-name:var(--font-display)] text-[3.5rem] leading-[1.1] font-bold text-white mb-6">
+            O mercado financeiro<br/>
+            <span class="text-accent">analisado por IA</span><br/>
+            em tempo real.
+          </h1>
+          <p class="text-lg text-text-muted leading-relaxed max-w-xl mb-10 font-[family-name:var(--font-body)]">
+            NexusFin AI detecta tendências globais, analisa dados de mercado e publica artigos completos automaticamente. Informação financeira precisa, contextualizada e sempre atualizada.
+          </p>
+          <div class="flex items-center gap-4">
+            <a href="#latest" class="inline-flex items-center gap-2 px-6 py-3.5 bg-accent hover:bg-accent-light text-primary font-semibold text-sm rounded-xl transition-colors">
+              Explorar Artigos
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+            <a href="about.html" class="inline-flex items-center gap-2 px-6 py-3.5 border border-border hover:border-accent/40 text-text-muted hover:text-white font-medium text-sm rounded-xl transition-colors">
+              Como funciona a IA
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Live Data Cards -->
+        <div class="col-span-5 space-y-4">
+          <!-- AI Activity Card -->
+          <div class="bg-surface-light/60 border border-border rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <i data-lucide="brain" class="w-4 h-4 text-accent"></i>
+                </div>
+                <span class="text-sm font-semibold text-white">Atividade da IA</span>
+              </div>
+              <span class="text-xs text-text-muted">Últimas 24h</span>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-white font-[family-name:var(--font-display)]">47</div>
+                <div class="text-xs text-text-muted mt-1">Artigos Publicados</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-accent font-[family-name:var(--font-display)]">312</div>
+                <div class="text-xs text-text-muted mt-1">Fontes Analisadas</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-pulse-green font-[family-name:var(--font-display)]">18</div>
+                <div class="text-xs text-text-muted mt-1">Tendências Detectadas</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trending Topic -->
+          <div class="bg-surface-light/60 border border-border rounded-2xl p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <i data-lucide="zap" class="w-4 h-4 text-accent"></i>
+              <span class="text-xs font-semibold text-accent uppercase tracking-wider">Tendência em Alta</span>
+            </div>
+            <h3 class="text-base font-semibold text-white mb-2 font-[family-name:var(--font-body)]">Fed sinaliza possível corte de juros em setembro — mercados reagem</h3>
+            <div class="flex items-center gap-3 text-xs text-text-muted">
+              <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> há 23 min</span>
+              <span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-xs">Economia Global</span>
+            </div>
+          </div>
+
+          <!-- Mini Market Pulse -->
+          <div class="bg-surface-light/60 border border-border rounded-2xl p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <i data-lucide="activity" class="w-4 h-4 text-pulse-green"></i>
+              <span class="text-xs font-semibold text-text-muted uppercase tracking-wider">Pulso do Mercado</span>
+            </div>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-white">Sentimento Global</span>
+                <div class="flex items-center gap-2">
+                  <div class="w-24 h-1.5 rounded-full bg-surface overflow-hidden">
+                    <div class="w-[72%] h-full rounded-full bg-pulse-green"></div>
+                  </div>
+                  <span class="text-xs font-semibold text-pulse-green">Otimista</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-white">Volatilidade (VIX)</span>
+                <div class="flex items-center gap-2">
+                  <div class="w-24 h-1.5 rounded-full bg-surface overflow-hidden">
+                    <div class="w-[35%] h-full rounded-full bg-accent"></div>
+                  </div>
+                  <span class="text-xs font-semibold text-accent">Baixa</span>
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-white">Índice de Medo</span>
+                <div class="flex items-center gap-2">
+                  <div class="w-24 h-1.5 rounded-full bg-surface overflow-hidden">
+                    <div class="w-[28%] h-full rounded-full bg-pulse-green"></div>
+                  </div>
+                  <span class="text-xs font-semibold text-pulse-green">Ganância</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Bar -->
+  <section class="border-y border-border bg-surface/50">
+    <div class="max-w-[1440px] mx-auto px-12 py-5">
+      <div class="flex items-center gap-3 overflow-x-auto">
+        <span class="text-xs text-text-muted uppercase tracking-wider font-semibold mr-2 shrink-0">Categorias:</span>
+        <a href="#" class="shrink-0 px-4 py-2 rounded-lg bg-accent/10 border border-accent/30 text-accent text-sm font-medium hover:bg-accent/20 transition-colors">Todas</a>
+        <a href="#" class="shrink-0 px-4 py-2 rounded-lg bg-surface-light border border-border text-text-muted text-sm font-medium hover:text-white hover:border-accent/30 transition-colors flex items-center gap-1.5">
+          <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i> Ações
+        </a>
+        <a href="#" class="shrink-0 px-4 py-2 rounded-lg bg-surface-light border border-border text-text-muted text-sm font-medium hover:text-white hover:border-accent/30 transition-colors flex items-center gap-1.5">
+          <i class="fa-brands fa-bitcoin text-xs"></i> Criptomoedas
+        </a>
+        <a href="#" class="shrink-0 px-4 py-2 rounded-lg bg-surface-light border border-border text-text-muted text-sm font-medium hover:text-white hover:border-accent/30 transition-colors flex items-center gap-1.5">
+          <i data-lucide="globe" class="w-3.5 h-3.5"></i> Economia Global
+        </a>
+        <a href="#" class="shrink-0 px-4 py-2 rounded-lg bg-surface-light border border-border text-text-muted text-sm font-medium hover:text-white hover:border-accent/30 transition-colors flex items-center gap-1.5">
+          <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Tendências
+        </a>
+        <a href="#" class="shrink-0 px-4 py-2 rounded-lg bg-surface-light border border-border text-text-muted text-sm font-medium hover:text-white hover:border-accent/30 transition-colors flex items-center gap-1.5">
+          <i data-lucide="gem" class="w-3.5 h-3.5"></i> Commodities
+        </a>
+        <a href="#" class="shrink-0 px-4 py-2 rounded-lg bg-surface-light border border-border text-text-muted text-sm font-medium hover:text-white hover:border-accent/30 transition-colors flex items-center gap-1.5">
+          <i data-lucide="landmark" class="w-3.5 h-3.5"></i> Política Monetária
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI-Detected Trends Section -->
+  <section class="max-w-[1440px] mx-auto px-12 py-16">
+    <div class="flex items-center justify-between mb-8">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+          <i data-lucide="radar" class="w-5 h-5 text-accent"></i>
+        </div>
+        <div>
+          <h2 class="text-xl font-bold text-white font-[family-name:var(--font-display)]">Últimas Tendências Detectadas pela IA</h2>
+          <p class="text-sm text-text-muted mt-0.5">Atualizado em tempo real a partir de 312 fontes globais</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-xs text-text-muted">
+        <span class="w-2 h-2 rounded-full bg-pulse-green pulse-dot"></span>
+        Monitorando agora
+      </div>
+    </div>
+
+    <div class="grid grid-cols-4 gap-4">
+      <!-- Trend Card 1 -->
+      <div class="bg-surface-light/60 border border-border rounded-2xl p-5 card-hover cursor-pointer group">
+        <div class="flex items-center justify-between mb-3">
+          <span class="px-2.5 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-medium">Economia Global</span>
+          <span class="text-xs text-text-muted">há 12 min</span>
+        </div>
+        <h3 class="text-sm font-semibold text-white mb-2 line-clamp-2 group-hover:text-accent transition-colors">Banco Central Europeu mantém taxa e reforça cautela com inflação persistente</h3>
+        <div class="flex items-center gap-2 mt-3">
+          <div class="flex items-center gap-1 px-2 py-0.5 rounded-full ai-badge">
+            <i data-lucide="sparkles" class="w-3 h-3 text-accent"></i>
+            <span class="text-[10px] text-accent font-medium">Gerado por IA</span>
+          </div>
+          <span class="text-xs text-pulse-green flex items-center gap-0.5"><i data-lucide="trending-up" class="w-3 h-3"></i>Alta relevância</span>
+        </div>
+      </div>
+
+      <!-- Trend Card 2 -->
+      <div class="bg-surface-light/60 border border-border rounded-2xl p-5 card-hover cursor-pointer group">
+        <div class="flex items-center justify-between mb-3">
+          <span class="px-2.5 py-1 rounded-full bg-orange-500/10 text-orange-400 text-xs font-medium">Criptomoedas</span>
+          <span class="text-xs text-text-muted">há 28 min</span>
+        </div>
+        <h3 class="text-sm font-semibold text-white mb-2 line-clamp-2 group-hover:text-accent transition-colors">ETFs de Bitcoin registram fluxo recorde de US$1.2 bi em uma semana</h3>
+        <div class="flex items-center gap-2 mt-3">
+          <div class="flex items-center gap-1 px-2 py-0.5 rounded-full ai-badge">
+            <i data-lucide="sparkles" class="w-3 h-3 text-accent"></i>
+            <span class="text-[10px] text-accent font-medium">Gerado por IA</span>
+          </div>
+          <span class="text-xs text-pulse-green flex items-center gap-0.5"><i data-lucide="trending-up" class="w-3 h-3"></i>Viral</span>
+        </div>
+      </div>
+
+      <!-- Trend Card 3 -->
+      <div class="bg-surface-light/60 border border-border rounded-2xl p-5 card-hover cursor-pointer group">
+        <div class="flex items-center justify-between mb-3">
+          <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-medium">Ações</span>
+          <span class="text-xs text-text-muted">há 45 min</span>
+        </div>
+        <h3 class="text-sm font-semibold text-white mb-2 line-clamp-2 group-hover:text-accent transition-colors">Nvidia ultrapassa Apple como empresa mais valiosa do mundo em capitalização</h3>
+        <div class="flex items-center gap-2 mt-3">
+          <div class="flex items-center gap-1 px-2 py-0.5 rounded-full ai-badge">
+            <i data-lucide="sparkles" class="w-3 h-3 text-accent"></i>
+            <span class="text-[10px] text-accent font-medium">Gerado por IA</span>
+          </div>
+          <span class="text-xs text-accent flex items-center gap-0.5"><i data-lucide="flame" class="w-3 h-3"></i>Em alta</span>
+        </div>
+      </div>
+
+      <!-- Trend Card 4 -->
+      <div class="bg-surface-light/60 border border-border rounded-2xl p-5 card-hover cursor-pointer group">
+        <div class="flex items-center justify-between mb-3">
+          <span class="px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-medium">Tendências</span>
+          <span class="text-xs text-text-muted">há 1h</span>
+        </div>
+        <h3 class="text-sm font-semibold text-white mb-2 line-clamp-2 group-hover:text-accent transition-colors">IA generativa redefine análise de risco no setor bancário global</h3>
+        <div class="flex items-center gap-2 mt-3">
+          <div class="flex items-center gap-1 px-2 py-0.5 rounded-full ai-badge">
+            <i data-lucide="sparkles" class="w-3 h-3 text-accent"></i>
+            <span class="text-[10px] text-accent font-medium">Gerado por IA</span>
+          </div>
+          <span class="text-xs text-blue-400 flex items-center gap-0.5"><i data-lucide="eye" class="w-3 h-3"></i>Destaque</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured + Latest Articles -->
+  <section id="latest" class="max-w-[1440px] mx-auto px-12 pb-20">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h2 class="text-2xl font-bold text-white font-[family-name:var(--font-display)]">Destaques do Dia</h2>
+        <p class="text-sm text-text-muted mt-1">Artigos completos gerados e curados por inteligência artificial</p>
+      </div>
+      <a href="#" class="text-sm text-accent hover:text-accent-light font-medium flex items-center gap-1 transition-colors">
+        Ver todos os artigos <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Main Featured Article -->
+      <div class="col-span-7">
+        <a href="article.html" class="block group">
+          <div class="relative rounded-2xl overflow-hidden aspect-[16/10]">
+            <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=900&h=560&fit=crop&auto=format&q=80" alt="Gráficos financeiros em tela digital" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-8">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="px-2.5 py-1 rounded-full bg-accent/20 text-accent text-xs font-semibold">Análise Especial</span>
+                <div class="flex items-center gap-1 px-2 py-0.5 rounded-full ai-badge">
+                  <i data-lucide="sparkles" class="w-3 h-3 text-accent"></i>
+                  <span class="text-[10px] text-accent font-medium">IA</span>
+                </div>
+              </div>
+              <h3 class="text-2xl font-bold text-white font-[family-name:var(--font-display)] mb-2 group-hover:text-accent transition-colors leading-tight">
+                Mercado americano atinge nova máxima histórica: o que esperar dos próximos meses e como se posicionar
+              </h3>
+              <p class="text-sm text-gray-300 line-clamp-2 mb-3">Análise detalhada dos fatores que impulsionam Wall Street e os cenários projetados pela nossa inteligência artificial para o segundo semestre.</p>
+              <div class="flex items-center gap-4 text-xs text-gray-400">
+                <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 8 min de leitura</span>
+                <span>14 de Janeiro, 2025</span>
+                <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> 2.4k views</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Side Articles -->
+      <div class="col-span-5 flex flex-col gap-4">
+        <!-- Article Card 2 -->
+        <a href="article.html" class="flex gap-4 group bg-surface-light/40 border border-border rounded-xl p-4 card-hover">
+          <div class="w-28 h-28 rounded-lg overflow-hidden shrink-0">
+            <img src="https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=300&h=300&fit=crop&auto=format&q=80" alt="Bitcoin e criptomoedas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="flex flex-col justify-between py-0.5">
+            <div>
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400 text-[10px] font-medium">Criptomoedas</span>
+                <div class="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full ai-badge">
+                  <i data-lucide="sparkles" class="w-2.5 h-2.5 text-accent"></i>
+                  <span class="text-[9px] text-accent font-medium">IA</span>
+                </div>
+              </div>
+              <h4 class="text-sm font-semibold text-white line-clamp-2 group-hover:text-accent transition-colors">Bitcoin supera $104k: análise técnica aponta próxima resistência em $110k</h4>
+            </div>
+            <div class="flex items-center gap-3 text-xs text-text-muted">
+              <span>5 min</span>
+              <span>há 2h</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Article Card 3 -->
+        <a href="article.html" class="flex gap-4 group bg-surface-light/40 border border-border rounded-xl p-4 card-hover">
+          <div class="w-28 h-28 rounded-lg overflow-hidden shrink-0">
+            <img src="https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=300&h=300&fit=crop&auto=format&q=80" alt="Gráficos do mercado de ações" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="flex flex-col justify-between py-0.5">
+            <div>
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-medium">Ações</span>
+                <div class="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full ai-badge">
+                  <i data-lucide="sparkles" class="w-2.5 h-2.5 text-accent"></i>
+                  <span class="text-[9px] text-accent font-medium">IA</span>
+                </div>
+              </div>
+              <h4 class="text-sm font-semibold text-white line-clamp-2 group-hover:text-accent transition-colors">Petrobras reporta lucro acima do esperado e ações sobem 4% no pregão</h4>
+            </div>
+            <div class="flex items-center gap-3 text-xs text-text-muted">
+              <span>4 min</span>
+              <span>há 3h</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Article Card 4 -->
+        <a href="article.html" class="flex gap-4 group bg-surface-light/40 border border-border rounded-xl p-4 card-hover">
+          <div class="w-28 h-28 rounded-lg overflow-hidden shrink-0">
+            <img src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=300&h=300&fit=crop&auto=format&q=80" alt="Inteligência artificial e tecnologia" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+          </div>
+          <div class="flex flex-col justify-between py-0.5">
+            <div>
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="px-2 py-0.5 rounded-full bg-purple-500/10 text-purple-400 text-[10px] font-medium">Tendências</span>
+                <div class="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full ai-badge">
+                  <i data-lucide="sparkles" class="w-2.5 h-2.5 text-accent"></i>
+                  <span class="text-[9px] text-accent font-medium">IA</span>
+                </div>
+              </div>
+              <h4 class="text-sm font-semibold text-white line-clamp-2 group-hover:text-accent transition-colors">Tokenização de ativos reais deve movimentar $16 tri até 2030, diz McKinsey</h4>
+            </div>
+            <div class="flex items-center gap-3 text-xs text-text-muted">
+              <span>6 min</span>
+              <span>há 5h</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- More Articles Grid -->
+  <section class="bg-surface/30 border-t border-border">
+    <div class="max-w-[1440px] mx-auto px-12 py-16">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-xl font-bold text-white font-[family-name:var(--font-display)]">Publicações Recentes</h2>
+        <div class="flex items-center gap-2">
+          <button class="px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/30 text-accent text-xs font-medium">Mais Recentes</button>
+          <button class="px-3 py-1.5 rounded-lg bg-surface-light border border-border text-text-muted text-xs font-medium hover:text-white transition-colors">Mais Lidos</button>
+          <button class="px-3 py-1.5 rounded-lg bg-surface-light border border-border text-text-muted text-xs font-medium hover:text-white transition-colors">IA Recomenda</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <a href="article.html" class="group bg-surface-light/50 border border-border rounded-2xl overflow-hidden card-hover">
+          <div class="relative aspect-[16/9] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=340&fit=crop&auto=format&q=80" alt="Dashboard de análise financeira" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute top-3 right-3">
+              <div class="flex items-center gap-1 px-2 py-1 rounded-full ai-badge backdrop-blur-sm">
+                <i data-lucide="sparkles" class="w-3 h-3 text-accent"></i>
+                <span class="text-[10px] text-accent font-medium">IA</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-medium">Economia Global</span>
+              <span class="text-xs text-text-muted">há 6h</span>
+            </div>
+            <h3 class="text-base font-semibold text-white mb-2 line-clamp-2 group-hover:text-accent transition-colors">China acelera estímulos econômicos e mercados emergentes se beneficiam</h3>
+            <p class="text-sm text-text-muted line-clamp-2 mb-4">O pacote de medidas do governo chinês inclui cortes em taxas de juros e incentivos ao consumo interno, impactando diretamente os mercados.</p>
+            <div class="flex items-center justify-between text-xs text-text-muted">
+              <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 7 min</span>
+              <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> 1.8k</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 2 -->
+        <a href="article.html" class="group bg-surface-light/50 border border-border rounded-2xl overflow-hidden card-hover">
+          <div class="relative aspect-[16/9] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=600&h=340&fit=crop&auto=format&q=80" alt="Ethereum e blockchain" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute top-3 right-3">
+              <div class="flex items-center gap-1 px-2 py-1 rounded-full ai-badge backdrop-blur-sm">
+                <i data-lucide="sparkles" class="w-3 h-3 text-accent"></i>
+                <span class="text-[10px] text-accent font-medium">IA</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400 text-[10px] font-medium">Criptomoedas</span>
+              <span class="text-xs text-text-muted">há 8h</span>
+            </div>
+            <h3 class="text-base font-semibold text-white mb-2 line-clamp-2 group-hover:text-accent transition-colors">DeFi atinge US$120 bi em TVL e atrai atenção institucional crescente</h3>
+            <p class="text-sm text-text-muted line-clamp-2 mb-4">Protocolos de finanças descentralizadas registram crescimento sustentável com entrada de capital de fundos de investimento tradicionais.</p>
+            <div class="flex items-center justify-between text-xs text-text-muted">
+              <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 5 min</span>
+              <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> 3.2k</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 3 -->
+        <a href="article.html" class="group bg-surface-light/50 border border-border rounded-2xl overflow-hidden card-hover">
+          <div class="relative aspect-[16/9] overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&h=340&fit=crop&auto=format&q=80" alt="Planejamento financeiro e investimentos" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <div class="absolute top-3 right-3">
+              <div class="flex items-center gap-1 px-2 py-1 rounded-full ai-badge backdrop-blur-sm">
+                <i data-lucide="sparkles" class="w-3 h-3 text-accent"></i>
+                <span class="text-[10px] text-accent font-medium">IA</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 text-[10px] font-medium">Commodities</span>
+              <span class="text-xs text-text-muted">há 10h</span>
+            </div>
+            <h3 class="text-base font-semibold text-white mb-2 line-clamp-2 group-hover:text-accent transition-colors">Ouro atinge máxima histórica com tensões geopolíticas e dólar fraco</h3>
+            <p class="text-sm text-text-muted line-clamp-2 mb-4">Metal precioso avança pelo quinto mês consecutivo enquanto investidores buscam proteção contra inflação e instabilidade global.</p>
+            <div class="flex items-center justify-between text-xs text-text-muted">
+              <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> 4 min</span>
+              <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i> 1.1k</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter / CTA -->
+  <section class="max-w-[1440px] mx-auto px-12 py-20">
+    <div class="relative bg-gradient-to-br from-secondary via-surface-light to-secondary rounded-3xl p-12 border border-border overflow-hidden">
+      <div class="absolute top-0 right-0 w-80 h-80 bg-accent/5 rounded-full blur-[100px]"></div>
+      <div class="absolute bottom-0 left-20 w-60 h-60 bg-blue-500/5 rounded-full blur-[80px]"></div>
+      <div class="relative z-10 max-w-2xl mx-auto text-center">
+        <div class="flex items-center justify-center gap-2 mb-4">
+          <div class="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+            <i data-lucide="bell" class="w-4 h-4 text-accent"></i>
+          </div>
+        </div>
+        <h2 class="text-3xl font-bold text-white font-[family-name:var(--font-display)] mb-3">Receba análises da IA direto no seu e-mail</h2>
+        <p class="text-text-muted mb-8">Os melhores artigos, tendências detectadas e alertas de mercado curados pela NexusFin AI. Sem spam, apenas conteúdo relevante.</p>
+        <div class="flex items-center gap-3 max-w-lg mx-auto">
+          <input type="email" placeholder="seu@email.com" class="flex-1 px-5 py-3.5 bg-surface border border-border rounded-xl text-white text-sm placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-colors" />
+          <button class="px-6 py-3.5 bg-accent hover:bg-accent-light text-primary font-semibold text-sm rounded-xl transition-colors whitespace-nowrap">
+            Inscrever-se
+          </button>
+        </div>
+        <p class="text-xs text-text-muted mt-4">Mais de 12.000 investidores já recebem nossa newsletter semanal.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-border bg-surface/30">
+  <div class="max-w-[1440px] mx-auto px-12 py-16">
+    <div class="grid grid-cols-12 gap-8">
+      <!-- Brand -->
+      <div class="col-span-4">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-accent to-accent-light flex items-center justify-center">
+            <i data-lucide="activity" class="w-5 h-5 text-primary"></i>
+          </div>
+          <div>
+            <span class="font-[family-name:var(--font-display)] text-xl font-bold text-white">NexusFin</span>
+            <span class="text-accent font-[family-name:var(--font-body)] text-sm font-semibold ml-1">AI</span>
+          </div>
+        </div>
+        <p class="text-sm text-text-muted leading-relaxed mb-6 max-w-xs">
+          Inteligência artificial aplicada ao mercado financeiro. Análises automáticas, tendências em tempo real e conteúdo curado por IA.
+        </p>
+        <div class="flex items-center gap-3">
+          <a href="#" class="w-9 h-9 rounded-lg bg-surface-light border border-border flex items-center justify-center hover:border-accent/40 transition-colors">
+            <i class="fa-brands fa-x-twitter text-sm text-text-muted"></i>
+          </a>
+          <a href="#" class="w-9 h-9 rounded-lg bg-surface-light border border-border flex items-center justify-center hover:border-accent/40 transition-colors">
+            <i class="fa-brands fa-linkedin-in text-sm text-text-muted"></i>
+          </a>
+          <a href="#" class="w-9 h-9 rounded-lg bg-surface-light border border-border flex items-center justify-center hover:border-accent/40 transition-colors">
+            <i class="fa-brands fa-youtube text-sm text-text-muted"></i>
+          </a>
+          <a href="#" class="w-9 h-9 rounded-lg bg-surface-light border border-border flex items-center justify-center hover:border-accent/40 transition-colors">
+            <i class="fa-brands fa-telegram text-sm text-text-muted"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Links -->
+      <div class="col-span-2">
+        <h4 class="text-sm font-semibold text-white mb-4">Navegação</h4>
+        <ul class="space-y-2.5">
+          <li><a href="index.html" class="text-sm text-text-muted hover:text-accent transition-colors">Início</a></li>
+          <li><a href="article.html" class="text-sm text-text-muted hover:text-accent transition-colors">Artigos</a></li>
+          <li><a href="about.html" class="text-sm text-text-muted hover:text-accent transition-colors">Como Funciona</a></li>
+          <li><a href="#" class="text-sm text-text-muted hover:text-accent transition-colors">Newsletter</a></li>
+        </ul>
+      </div>
+
+      <div class="col-span-2">
+        <h4 class="text-sm font-semibold text-white mb-4">Categorias</h4>
+        <ul class="space-y-2.5">
+          <li><a href="#" class="text-sm text-text-muted hover:text-accent transition-colors">Ações</a></li>
+          <li><a href="#" class="text-sm text-text-muted hover:text-accent transition-colors">Criptomoedas</a></li>
+          <li><a href="#" class="text-sm text-text-muted hover:text-accent transition-colors">Economia Global</a></li>
+          <li><a href="#" class="text-sm text-text-muted hover:text-accent transition-colors">Commodities</a></li>
+          <li><a href="#" class="text-sm text-text-muted hover:text-accent transition-colors">Tendências</a></li>
+        </ul>
+      </div>
+
+      <div class="col-span-2">
+        <h4 class="text-sm font-semibold text-white mb-4">Sobre</h4>
+        <ul class="space-y-2.5">
+          <li><a href="#" class="text-sm text-text-muted hover:text-accent transition-colors">Termos de Uso</a></li>
+          <li><a href="#" class="text-sm text-text-muted hover:text-accent transition-colors">Privacidade</a></li>
+          <li><a href="#" class="text-sm text-text-muted hover:text-accent transition-colors">Contato</a></li>
+          <li><a href="#" class="text-sm text-text-muted hover:text-accent transition-colors">API</a></li>
+        </ul>
+      </div>
+
+      <div class="col-span-2">
+        <h4 class="text-sm font-semibold text-white mb-4">Status da IA</h4>
+        <div class="space-y-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-pulse-green pulse-dot"></span>
+            <span class="text-xs text-text-muted">Sistemas operacionais</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-pulse-green pulse-dot"></span>
+            <span class="text-xs text-text-muted">Coleta de dados ativa</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-pulse-green pulse-dot"></span>
+            <span class="text-xs text-text-muted">Publicação automática</span>
+          </div>
+          <div class="text-xs text-text-muted mt-3">Último artigo: há 12 min</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-12 pt-8 border-t border-border flex items-center justify-between">
+      <p class="text-xs text-text-muted">© 2025 NexusFin AI. Conteúdo gerado por inteligência artificial. Não constitui recomendação de investimento.</p>
+      <p class="text-xs text-text-muted">Powered by AI · Atualizado em tempo real</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+<script>if (window.lucide) lucide.createIcons();</script>
+</html>
