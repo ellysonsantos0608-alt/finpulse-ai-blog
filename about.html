@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://unpkg.com" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://unpkg.com/@fortawesome/fontawesome-free@6.7.2/js/all.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    * {
+      scrollbar-width: none;
+      scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    }
+  </style>
+</head>
+
+<body class="bg-[#0a0e1a] text-white antialiased">
+
+<!-- Tailwind Theme & Custom Styles -->
+<style type="text/tailwindcss">
+  @theme {
+    --color-primary: #0d1b2a;
+    --color-secondary: #1b2a4a;
+    --color-accent: #c9a84c;
+    --color-accent-light: #e2c97e;
+    --color-surface: #111827;
+    --color-surface-light: #1a2540;
+    --color-pulse-green: #22c55e;
+    --color-pulse-red: #ef4444;
+    --color-text-primary: #f1f5f9;
+    --color-text-muted: #94a3b8;
+    --color-border: #1e293b;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+  }
+</style>
+
+<style>
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes data-flow {
+    0% { transform: translateY(100%); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(-100%); opacity: 0; }
+  }
+  .pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+  .float-1 { animation: float 6s ease-in-out infinite; }
+  .float-2 { animation: float 6s ease-in-out infinite 1s; }
+  .float-3 { animation: float 6s ease-in-out infinite 2s; }
+  .glass-nav {
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .ai-badge {
+    background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+    border: 1px solid rgba(201,168,76,0.3);
+  }
+  .step-line::after {
+    content: '';
+    position: absolute;
+    left: 27px;
+    top: 56px;
+    bottom: -24px;
+    width: 2px;
+    background: linear-gradient(to bottom, #c9a84c, transparent);
+  }
+  .glow-card {
+    position: relative;
+    overflow: hidden;
+  }
+  .glow-card::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #c9a84c, transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .glow-card:hover::before {
+    opacity: 1;
+  }
+</style>
+
+<link rel="stylesheet" href="https://fonts.googleapis.cn/css2?family=Playfair+Display:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" />
+
+<!-- Navigation -->
+<nav class="glass-nav fixed top-0 left-0 right-0 z-50 border-b border-border">
+  <div class="max-w-[1440px] mx-auto px-12 h-[72px] flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-accent to-accent-light flex items-center justify-center">
+        <i data-lucide="activity" class="w-5 h-5 text-primary"></i>
+      </div>
+      <div>
+        <span class="font-[family-name:var(--font-display)] text-xl font-bold tracking-tight text-white">NexusFin</span>
+        <span class="text-accent font-[family-name:var(--font-body)] text-sm font-semibold ml-1">AI</span>
+      </div>
+    </a>
+    <div class="hidden md:flex items-center gap-8">
+      <a href="index.html" class="text-text-muted text-sm hover:text-accent transition-colors">Início</a>
+      <a href="article.html" class="text-text-muted text-sm hover:text-accent transition-colors">Artigos</a>
+      <a href="about.html" class="text-white font-medium text-sm hover:text-accent transition-colors">Como Funciona</a>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2 px-3 py-1.5 rounded-full ai-badge">
+        <span class="w-2 h-2 rounded-full bg-pulse-green pulse-dot"></span>
+        <span class="text-xs font-medium text-accent">IA Ativa</span>
+      </div>
+      <button class="w-10 h-10 rounded-lg bg-surface-light border border-border flex items-center justify-center hover:border-accent/40 transition-colors">
+        <i data-lucide="search" class="w-4 h-4 text-text-muted"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="pt-[72px]">
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><circle cx=%2220%22 cy=%2220%22 r=%221%22 fill=%22white%22/></svg>');"></div>
+    <div class="absolute top-20 right-20 w-[500px] h-[500px] bg-accent/5 rounded-full blur-[150px]"></div>
+    <div class="absolute bottom-0 left-0 w-[300px] h-[300px] bg-blue-500/5 rounded-full blur-[100px]"></div>
+
+    <div class="max-w-[1440px] mx-auto px-12 py-28 text-center relative z-10">
+      <div class="flex items-center justify-center gap-2 mb-6">
+        <div class="flex items-center gap-2 px-4 py-2 rounded-full ai-badge">
+          <i data-lucide="brain" class="w-4 h-4 text-accent"></i>
+          <span class="text-xs font-semibold text-accent tracking-wide uppercase">Inteligência Artificial + Finanças</span>
+        </div>
+      </div>
+      <h1 class="font-[family-name:var(--font-display)] text-[3.25rem] leading-[1.15] font-bold text-white mb-6 max-w-3xl mx-auto">
+        Como a NexusFin AI transforma <span class="text-accent">dados globais</span> em análises financeiras
+      </h1>
+      <p class="text-lg text-text-muted leading-relaxed max-w-2xl mx-auto mb-10 font-[family-name:var(--font-body)]">
+        Entenda o processo automatizado que monitora centenas de fontes, detecta tendências em tempo real e publica artigos completos com análises contextualizadas — 24 horas por dia, 7 dias por semana.
+      </p>
+
+      <!-- Stats Row -->
+      <div class="flex items-center justify-center gap-12">
+        <div class="text-center">
+          <div class="text-3xl font-bold text-accent font-[family-name:var(--font-display)]">312+</div>
+          <div class="text-xs text-text-muted mt-1">Fontes Monitoradas</div>
+        </div>
+        <div class="w-px h-10 bg-border"></div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-white font-[family-name:var(--font-display)]">24/7</div>
+          <div class="text-xs text-text-muted mt-1">Operação Contínua</div>
+        </div>
+        <div class="w-px h-10 bg-border"></div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-white font-[family-name:var(--font-display)]">47</div>
+          <div class="text-xs text-text-muted mt-1">Artigos/Dia</div>
+        </div>
+        <div class="w-px h-10 bg-border"></div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-pulse-green font-[family-name:var(--font-display)]">< 5min</div>
+          <div class="text-xs text-text-muted mt-1">Tempo de Publicação</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works - Pipeline -->
+  <section class="bg-surface/30 border-y border-border">
+    <div class="max-w-[1440px] mx-auto px-12 py-20">
+      <div class="text-center mb-16">
+        <span class="text-xs font-semibold text-accent uppercase tracking-wider">O Processo</span>
+        <h2 class="font-[family-name:var(--font-display)] text-3xl font-bold text-white mt-3 mb-4">De dados brutos a artigos publicados</h2>
+        <p class="text-text-muted max-w-xl mx-auto">Cada artigo passa por um pipeline automatizado de 4 etapas antes de ser publicado no blog.</p>
+      </div>
+
+      <!-- Steps -->
+      <div class="grid grid-cols-4 gap-6">
+        <!-- Step 1 -->
+        <div class="relative glow-card bg-surface-light/60 border border-border rounded-2xl p-6 hover:border-accent/30 transition-all duration-300">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center float-1">
+              <i data-lucide="radar" class="w-6 h-6 text-accent"></i>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-full bg-accent text-primary text-xs font-bold flex items-center justify-center">1</span>
+              <span class="text-xs text-text-muted font-medium uppercase tracking-wider">Coleta</span>
+            </div>
+          </div>
+          <h3 class="text-base font-semibold text-white mb-2">Monitoramento Global</h3>
+          <p class="text-sm text-text-muted leading-relaxed mb-4">
+            A IA monitora continuamente mais de 312 fontes de dados financeiros em tempo real: agências de notícias, terminais Bloomberg, relatórios do Fed, SEC filings, redes sociais e fóruns especializados.
+          </p>
+          <div class="space-y-2 pt-3 border-t border-border">
+            <div class="flex items-center gap-2 text-xs text-text-muted">
+              <i data-lucide="check-circle" class="w-3 h-3 text-pulse-green"></i>
+              Reuters, Bloomberg, CNBC
+            </div>
+            <div class="flex items-center gap-2 text-xs text-text-muted">
+              <i data-lucide="check-circle" class="w-3 h-3 text-pulse-green"></i>
+              Bancos Centrais (Fed, BCE, Bacen)
+            </div>
+            <div class="flex items-center gap-2 text-xs text-text-muted">
+              <i data-lucide="check-circle" class="w-3 h-3 text-pulse-green"></i>
+              Dados de mercado em tempo real
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="relative glow-card bg-surface-light/60 border border-border rounded-2xl p-6 hover:border-accent/30 transition-all duration-300">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center float-2">
+              <i data-lucide="brain" class="w-6 h-6 text-blue-400"></i>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-full bg-accent text-primary text-xs font-bold flex items-center justify-center">2</span>
+              <span class="text-xs text-text-muted font-medium uppercase tracking-wider">Análise</span>
+            </div>
+          </div>
+          <h3 class="text-base font-semibold text-white mb-2">Processamento Inteligente</h3>
+          <p class="text-sm text-text-muted leading-relaxed mb-4">
+            Algoritmos de NLP e modelos de linguagem avançados processam os dados coletados, identificando padrões, correlações, sentimento de mercado e eventos de alto impacto.
+          </p>
+          <div class="space-y-2 pt-3 border-t border-border">
+            <div class="flex items-center gap-2 text-xs text-text-muted">
+              <i data-lucide="check-circle" class="w-3 h-3 text-pulse-green"></i>
+              Análise de sentimento NLP
+            </div>
+            <div class="flex items-center gap-2 text-xs text-text-muted">
+              <i data-lucide="check-circle" class="w-3 h-3 text-pulse-green"></i>
+              Detecção de padrões
+            </div>
+            <div class="flex items-center gap-2 text-xs text-text-muted">
+              <i data-lucide="check-circle" class="w-3 h-3 text-pulse-green"></i>
+              Correlação cross-market
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="relative glow-card bg-surface-light/60 border border-border rounded-2xl p-6 hover:border-accent/30 transition-all duration-300">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center float-3">
+              <i data-lucide="pen-tool" class="w-6 h-6 text-emerald-400"></i>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-full bg-accent text-primary text-xs font-bold flex items-center justify-center">3</span>
+              <span class="text-xs text-text-muted font-medium uppercase tracking-wider">Redação</span>
+            </div>
+          </div>
+          <h3 class="text-base font-semibold text-white mb-2">Geração de Conteúdo</h3>
+          <p class="text-sm text-text-muted leading-relaxed mb-4">
+            A IA redige artigos completos com contexto histórico, análise técnica, dados comparativos e projeções. Cada artigo inclui imagens relevantes e visualização de dados.
+          </p>
+          <div class="space-y-2 pt-3 border-t border-border">
+            <div class="flex items-center gap-2 text-xs text-text-muted">
+              <i data-lucide="check-circle" class="w-3 h-3 text-pulse-green"></i>
+              Linguagem jornalística
+            </div>
+            <div class="flex items-center gap-2 text-xs text-text-muted">
+              <i data-lucide="check-circle" class="w-3 h-3 text-pulse-green"></i>
+              Contexto e profundidade
+            </div>
+            <div class="flex items-center gap-2 text-xs text-text-muted">
+              <i data-lucide="check-circle" class="w-3 h-3 text-pulse-green"></i>
+              Imagens e visualizações
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="relative glow-card bg-surface-light/60 border border-border rounded-2xl p-6 hover:border-accent/30 transition-all duration-300">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center float-1">
+              <i data-lucide="rocket" class="w-6 h-6 text-purple-400"></i>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-full bg-accent text-primary text-xs font-bold flex items-center justify-center">4</span>
+              <span class="text-xs text-text-muted font-medium uppercase tracking-wider">Publicação</span>
+            </div>
+          </div>
+          <h3 class="text-base font-semibold text-white mb-2">Publicação Automática</h3>
+          <p class="text-sm text-text-muted leading-relaxed mb-4">
+            Após validação de qualidade e fact-checking automatizado, o artigo é publicado com categorização, tags e SEO otimizado. Artigos são atualizados se novos dados surgem.
+          </p>
+          <div class="space-y-2 pt-3 border-t border-border">
+            <div class="flex items-center gap-2 text-xs text-text-muted">
+              <i data-lucide="check-circle" class="w-3 h-3 text-pulse-green"></i>
+              Verificação de fatos
+            </div>
+            <div class="flex items-center gap-2 text-xs text-text-muted">
+              <i data-lucide="check-circle" class="w-3 h-3 text-pulse-green"></i>
+              SEO automático
+            </div>
+            <div class="flex items-center gap-2 text-xs text-text-muted">
+              <i data-lucide="check-circle" class="w-3 h-3 text-pulse-green"></i>
+              Atualização contínua
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flow Arrow -->
+      <div class="flex items-center justify-center mt-8">
+        <div class="flex items-center gap-4 px-6 py-3 rounded-full bg-surface-light/60 border border-border">
+          <span class="text-xs text-text-muted">Dados Brutos</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-accent"></i>
+          <span class="text-xs text-text-muted">Análise IA</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-accent"></i>
+          <span class="text-xs text-text-muted">Artigo Escrito</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 text-accent"></i>
+          <span class="text-xs text-accent font-semibold">Publicado</span>
+          <span class="text-xs text-text-muted ml-1">em < 5 min</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technology Stack -->
+  <section class="max-w-[1440px] mx-auto px-12 py-20">
+    <div class="grid grid-cols-12 gap-12 items-center">
+      <div class="col-span-5">
+        <span class="text-xs font-semibold text-accent uppercase tracking-wider">Tecnologia</span>
+        <h2 class="font-[family-name:var(--font-display)] text-3xl font-bold text-white mt-3 mb-4">Infraestrutura de ponta para análise financeira</h2>
+        <p class="text-text-muted leading-relaxed mb-8">
+          A NexusFin AI utiliza um stack tecnológico robusto projetado para processar grandes volumes de dados financeiros com baixa latência e alta precisão.
+        </p>
+
+        <div class="space-y-5">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
+              <i data-lucide="cpu" class="w-5 h-5 text-accent"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-semibold text-white mb-1">Processamento de Linguagem Natural</h4>
+              <p class="text-xs text-text-muted leading-relaxed">Modelos treinados com dados financeiros em português e inglês para máxima precisão contextual.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+              <i data-lucide="database" class="w-5 h-5 text-blue-400"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-semibold text-white mb-1">Ingestão de Dados em Tempo Real</h4>
+              <p class="text-xs text-text-muted leading-relaxed">Pipeline de streaming que processa milhares de eventos por segundo de APIs financeiras globais.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center shrink-0">
+              <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-semibold text-white mb-1">Verificação Automatizada</h4>
+              <p class="text-xs text-text-muted leading-relaxed">Sistema de cross-referencing que valida dados contra múltiplas fontes antes da publicação.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0">
+              <i data-lucide="refresh-cw" class="w-5 h-5 text-purple-400"></i>
+            </div>
+            <div>
+              <h4 class="text-sm font-semibold text-white mb-1">Atualização Dinâmica</h4>
+              <p class="text-xs text-text-muted leading-relaxed">Artigos publicados são revisados automaticamente quando novos dados relevantes são detectados.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Diagram -->
+      <div class="col-span-7">
+        <div class="bg-surface-light/40 border border-border rounded-3xl p-8">
+          <!-- Data Source Row -->
+          <div class="mb-6">
+            <span class="text-[10px] text-text-muted uppercase tracking-wider font-semibold mb-3 block">Fontes de Dados</span>
+            <div class="grid grid-cols-4 gap-3">
+              <div class="bg-surface/60 border border-border rounded-xl p-3 text-center">
+                <i data-lucide="globe" class="w-5 h-5 text-blue-400 mx-auto mb-1.5"></i>
+                <div class="text-[10px] text-white font-medium">Notícias Globais</div>
+                <div class="text-[9px] text-text-muted">Reuters, Bloomberg</div>
+              </div>
+              <div class="bg-surface/60 border border-border rounded-xl p-3 text-center">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-emerald-400 mx-auto mb-1.5"></i>
+                <div class="text-[10px] text-white font-medium">Dados de Mercado</div>
+                <div class="text-[9px] text-text-muted">Bolsas, Exchanges</div>
+              </div>
+              <div class="bg-surface/60 border border-border rounded-xl p-3 text-center">
+                <i data-lucide="landmark" class="w-5 h-5 text-accent mx-auto mb-1.5"></i>
+                <div class="text-[10px] text-white font-medium">Bancos Centrais</div>
+                <div class="text-[9px] text-text-muted">Fed, BCE, Bacen</div>
+              </div>
+              <div class="bg-surface/60 border border-border rounded-xl p-3 text-center">
+                <i data-lucide="message-circle" class="w-5 h-5 text-purple-400 mx-auto mb-1.5"></i>
+                <div class="text-[10px] text-white font-medium">Redes Sociais</div>
+                <div class="text-[9px] text-text-muted">X, Reddit, Fóruns</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="flex justify-center my-4">
+            <div class="flex items-center gap-2 text-accent">
+              <div class="w-6 h-px bg-accent/30"></div>
+              <i data-lucide="chevron-down" class="w-5 h-5"></i>
+              <div class="w-6 h-px bg-accent/30"></div>
+            </div>
+          </div>
+
+          <!-- AI Engine -->
+          <div class="bg-gradient-to-r from-accent/5 to-blue-500/5 border border-accent/20 rounded-2xl p-6 mb-4">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-xl bg-accent/15 flex items-center justify-center">
+                <i data-lucide="brain" class="w-5 h-5 text-accent"></i>
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-white">NexusFin AI Engine</div>
+                <div class="text-[10px] text-text-muted">Processamento inteligente em tempo real</div>
+              </div>
+              <div class="ml-auto flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-pulse-green pulse-dot"></span>
+                <span class="text-[10px] text-pulse-green font-medium">Online</span>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="bg-surface/40 rounded-lg p-3 text-center">
+                <div class="text-xs text-accent font-semibold">NLP</div>
+                <div class="text-[9px] text-text-muted">Compreensão textual</div>
+              </div>
+              <div class="bg-surface/40 rounded-lg p-3 text-center">
+                <div class="text-xs text-blue-400 font-semibold">Análise Quantitativa</div>
+                <div class="text-[9px] text-text-muted">Padrões e correlações</div>
+              </div>
+              <div class="bg-surface/40 rounded-lg p-3 text-center">
+                <div class="text-xs text-emerald-400 font-semibold">Geração de Texto</div>
+                <div class="text-[9px] text-text-muted">Redação automática</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="flex justify-center my-4">
+            <div class="flex items-center gap-2 text-accent">
+              <div class="w-6 h-px bg-accent/30"></div>
+              <i data-lucide="chevron-down" class="w-5 h-5"></i>
+              <div class="w-6 h-px bg-accent/30"></div>
+            </div>
+          </div>
+
+          <!-- Output -->
+          <div class="grid grid-cols-3 gap-3">
+            <div class="bg-surface/60 border border-border rounded-xl p-3 text-center">
+              <i data-lucide="file-text" class="w-5 h-5 text-white mx-auto mb-1.5"></i>
+              <div class="text-[10px] text-white font-medium">Artigos</div>
+              <div class="text-[9px] text-text-muted">47/dia</div>
+            </div>
+            <div class="bg-surface/60 border border-border rounded-xl p-3 text-center">
+              <i data-lucide="zap" class="w-5 h-5 text-accent mx-auto mb-1.5"></i>
+              <div class="text-[10px] text-white font-medium">Alertas</div>
+              <div class="text-[9px] text-text-muted">Tempo real</div>
+            </div>
+            <div class="bg-surface/60 border border-border rounded-xl p-3 text-center">
+              <i data-lucide="trending-up" class="w-5 h-5 text-pulse-green mx-auto mb-1.5"></i>
+              <div class="text-[10px] text-white font-medium">Tendências</div>
+              <div class="text-[9px] text-text-muted">18 detectadas hoje</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Differentials -->
+  <section class="bg-surface/30 border-y border-border">
+    <div class="max-w-[1440px] mx-auto px-12 py-20">
+      <div class="text-center mb-14">
+        <span class="text-xs font-semibold text-accent uppercase tracking-wider">Diferenciais</span>
+        <h2 class="font-[family-name:var(--font-display)] text-3xl font-bold text-white mt-3 mb-4">Por que confiar na NexusFin AI?</h2>
+        <p class="text-text-muted max-w-xl mx-auto">Combinamos a velocidade da inteligência artificial com rigor analítico para entregar conteúdo financeiro de qualidade.</p>
+      </div>
+
+      <div class="grid grid-cols-3 gap-6">
+        <div class="bg-surface-light/60 border border-border rounded-2xl p-8 text-center hover:border-accent/30 transition-colors">
+          <div class="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-5">
+            <i data-lucide="clock" class="w-7 h-7 text-accent"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2 font-[family-name:var(--font-display)]">Velocidade Incomparável</h3>
+          <p class="text-sm text-text-muted leading-relaxed">
+            Enquanto redações tradicionais levam horas para cobrir um evento, a NexusFin AI publica análises completas em menos de 5 minutos após a detecção de uma tendência significativa.
+          </p>
+        </div>
+
+        <div class="bg-surface-light/60 border border-border rounded-2xl p-8 text-center hover:border-accent/30 transition-colors">
+          <div class="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center mx-auto mb-5">
+            <i data-lucide="layers" class="w-7 h-7 text-blue-400"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2 font-[family-name:var(--font-display)]">Cobertura Abrangente</h3>
+          <p class="text-sm text-text-muted leading-relaxed">
+            Monitoramento simultâneo de ações, criptomoedas, commodities, câmbio, política monetária e macroeconomia global. Nenhuma tendência relevante passa despercebida.
+          </p>
+        </div>
+
+        <div class="bg-surface-light/60 border border-border rounded-2xl p-8 text-center hover:border-accent/30 transition-colors">
+          <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 flex items-center justify-center mx-auto mb-5">
+            <i data-lucide="shield-check" class="w-7 h-7 text-emerald-400"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-white mb-2 font-[family-name:var(--font-display)]">Transparência Total</h3>
+          <p class="text-sm text-text-muted leading-relaxed">
+            Cada artigo indica claramente que foi gerado por IA, lista as fontes utilizadas e exibe o horário da última atualização. Honestidade e clareza em primeiro lugar.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="max-w-[1440px] mx-auto px-12 py-20">
+    <div class="grid grid-cols-12 gap-12">
+      <div class="col-span-4">
+        <span class="text-xs font-semibold text-accent uppercase tracking-wider">FAQ</span>
+        <h2 class="font-[family-name:var(--font-display)] text-3xl font-bold text-white mt-3 mb-4">Perguntas Frequentes</h2>
+        <p class="text-text-muted leading-relaxed mb-6">
+          Tudo o que você precisa saber sobre como a NexusFin AI funciona e como usar nossas análises.
+        </p>
+        <a href="index.html" class="inline-flex items-center gap-2 px-5 py-3 bg-accent hover:bg-accent-light text-primary font-semibold text-sm rounded-xl transition-colors">
+          Explorar Artigos
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+      </div>
+      <div class="col-span-8 space-y-4">
+        <!-- FAQ 1 -->
+        <div class="bg-surface-light/60 border border-border rounded-xl p-6">
+          <h4 class="text-base font-semibold text-white mb-2 flex items-center gap-3">
+            <i data-lucide="help-circle" class="w-5 h-5 text-accent shrink-0"></i>
+            Os artigos são confiáveis se são escritos por IA?
+          </h4>
+          <p class="text-sm text-text-muted leading-relaxed pl-8">
+            Sim. Cada artigo é baseado em dados de fontes verificadas como Reuters, Bloomberg e relatórios oficiais de bancos centrais. A IA não especula — ela analisa e contextualiza dados reais. Além disso, todos os artigos passam por verificação automatizada de fatos antes da publicação.
+          </p>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="bg-surface-light/60 border border-border rounded-xl p-6">
+          <h4 class="text-base font-semibold text-white mb-2 flex items-center gap-3">
+            <i data-lucide="help-circle" class="w-5 h-5 text-accent shrink-0"></i>
+            Posso usar as análises para tomar decisões de investimento?
+          </h4>
+          <p class="text-sm text-text-muted leading-relaxed pl-8">
+            Nosso conteúdo é informativo e educacional. Embora as análises sejam rigorosas e baseadas em dados, elas não constituem recomendação de investimento. Consulte sempre um profissional certificado antes de tomar decisões financeiras.
+          </p>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="bg-surface-light/60 border border-border rounded-xl p-6">
+          <h4 class="text-base font-semibold text-white mb-2 flex items-center gap-3">
+            <i data-lucide="help-circle" class="w-5 h-5 text-accent shrink-0"></i>
+            Com que frequência os artigos são publicados?
+          </h4>
+          <p class="text-sm text-text-muted leading-relaxed pl-8">
+            A IA opera 24/7, publicando em média 47 artigos por dia. A frequência varia conforme a atividade do mercado — em dias de alta volatilidade, a produção aumenta para cobrir todos os desenvolvimentos relevantes.
+          </p>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="bg-surface-light/60 border border-border rounded-xl p-6">
+          <h4 class="text-base font-semibold text-white mb-2 flex items-center gap-3">
+            <i data-lucide="help-circle" class="w-5 h-5 text-accent shrink-0"></i>
+            Os artigos são atualizados após a publicação?
+          </h4>
+          <p class="text-sm text-text-muted leading-relaxed pl-8">
+            Sim! Quando novos dados relevantes são detectados, a IA atualiza automaticamente os artigos existentes com as informações mais recentes. Cada artigo exibe o horário da última atualização para total transparência.
+          </p>
+        </div>
+
+        <!-- FAQ 5 -->
+        <div class="bg-surface-light/60 border border-border rounded-xl p-6">
+          <h4 class="text-base font-semibold text-white mb-2 flex items-center gap-3">
+            <i data-lucide="help-circle" class="w-5 h-5 text-accent shrink-0"></i>
+            Existe alguma intervenção humana no processo?
+          </h4>
+          <p class="text-sm text-text-muted leading-relaxed pl-8">
+            O pipeline é totalmente automatizado, desde a coleta de dados até a publicação. No entanto, nossa equipe monitora continuamente a qualidade do output e ajusta os modelos quando necessário para garantir a precisão e relevância do conteúdo.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="max-w-[1440px] mx-auto px-12 pb-20">
+    <div class="relative bg-gradient-to-br from-secondary via-surface-light to-secondary rounded-3xl p-16 border border-border overflow-hidden text-center">
+      <div class="absolute top-0 right-0 w-80 h-80 bg-accent/5 rounded-full blur-[100px]"></div>
+      <div class="absolute bottom-0 left-20 w-60 h-60 bg-blue-500/5 rounded-full blur-[80px]"></div>
+      <div class="relative z-10">
+        <div class="w-14 h-14 rounded-2xl bg-accent/10 flex items-center justify-center mx-auto mb-6">
+          <i data-lucide="sparkles" class="w-7 h-7 text-accent"></i>
+        </div>
+        <h2 class="text-3xl font-bold text-white font-[family-name:var(--font-display)] mb-4 max-w-2xl mx-auto">Pronto para explorar o futuro da análise financeira?</h2>
+        <p class="text-text-muted mb-8 max-w-lg mx-auto">Descubra como a inteligência artificial está transformando a forma como consumimos informação sobre o mercado financeiro.</p>
+        <div class="flex items-center justify-center gap-4">
+          <a href="index.html" class="inline-flex items-center gap-2 px-7 py-4 bg-accent hover:bg-accent-light text-primary font-semibold text-sm rounded-xl transition-colors">
+            <i data-lucide="newspaper" class="w-4 h-4"></i>
+            Ver Últimos Artigos
+          </a>
+          <a href="#" class="inline-flex items-center gap-2 px-7 py-4 border border-border hover:border-accent/40 text-text-muted hover:text-white font-medium text-sm rounded-xl transition-colors">
+            <i data-lucide="bell" class="w-4 h-4"></i>
+            Assinar Newsletter
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-border bg-surface/30">
+  <div class="max-w-[1440px] mx-auto px-12 py-12">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-accent-light flex items-center justify-center">
+          <i data-lucide="activity" class="w-4 h-4 text-primary"></i>
+        </div>
+        <span class="font-[family-name:var(--font-display)] text-base font-bold text-white">NexusFin <span class="text-accent font-[family-name:var(--font-body)] text-xs font-semibold">AI</span></span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="index.html" class="text-xs text-text-muted hover:text-accent transition-colors">Início</a>
+        <a href="article.html" class="text-xs text-text-muted hover:text-accent transition-colors">Artigos</a>
+        <a href="about.html" class="text-xs text-text-muted hover:text-accent transition-colors">Como Funciona</a>
+        <a href="#" class="text-xs text-text-muted hover:text-accent transition-colors">Privacidade</a>
+      </div>
+      <p class="text-xs text-text-muted">© 2025 NexusFin AI · Não constitui recomendação de investimento.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+<script>if (window.lucide) lucide.createIcons();</script>
+</html>
